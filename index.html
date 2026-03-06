@@ -210,6 +210,51 @@
     0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
     100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
   }
+  /* Easter egg overlay */
+  .easter-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+    animation: flashIn 0.4s ease;
+  }
+  .easter-overlay.active { display: flex; }
+  @keyframes flashIn { 0% { background: white; } 100% { background: #000; } }
+  .easter-label {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+    animation: blink 1.2s infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+  .easter-text {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(2rem, 10vw, 5rem);
+    color: #FFD700;
+    line-height: 1.1;
+    text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 80px rgba(255,215,0,0.4);
+    animation: glitch 3s infinite;
+  }
+  @keyframes glitch {
+    0%, 90%, 100% { transform: none; }
+    92% { transform: translateX(-4px) skewX(-2deg); text-shadow: -3px 0 #ff4d6d, 3px 0 #00cfff; }
+    94% { transform: translateX(4px) skewX(2deg); text-shadow: 3px 0 #ff4d6d, -3px 0 #00cfff; }
+  }
+  .easter-close {
+    margin-top: 40px; padding: 12px 32px;
+    background: transparent; border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 10px; color: rgba(255,255,255,0.4);
+    font-family: "Nunito", sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.3s;
+  }
+  .easter-close:hover { border-color: white; color: white; }
 </style>
 </head>
 <body>
@@ -285,6 +330,12 @@
       return;
     }
 
+    // Easter egg Gabriel + Jovana
+    if (menino === "gabriel" && menina === "jovana") {
+      document.getElementById("easterOverlay").classList.add("active");
+      return;
+    }
+
     const especial = casosEspeciais.some(([m, f]) => menino === m && menina === f);
 
     // Limpa confetes antigos
@@ -330,5 +381,10 @@
     inp.addEventListener('keydown', e => { if (e.key === 'Enter') calcular(); });
   });
 </script>
+<div class="easter-overlay" id="easterOverlay">
+  <div class="easter-label">🥚 EASTER EGG DESBLOQUEADO 🥚</div>
+  <div class="easter-text">UNCLE MARIO QUESTION:<br>EAE GABEL<br>E A JOVANA???</div>
+  <button class="easter-close" onclick="document.getElementById('easterOverlay').classList.remove('active')">fechar</button>
+</div>
 </body>
 </html>
